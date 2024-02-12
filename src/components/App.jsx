@@ -7,55 +7,40 @@ import Filter from 'components/Filter';
 import ContactList from 'components/ContactList';
 import initialContacts from './contacts.json';
 
+const storageKey = 'storagContacts';
+const getInitalContacts=() => {
+  const todosLocalStorage = localStorage.getItem(storageKey);
+  return todosLocalStorage!==null?JSON.parse(todosLocalStorage):initialContacts
+  }
+
 const App = () => {
-  const [contacts, setContacts] = useState([])
+  const [contacts, setContacts] = useState(getInitalContacts)
   const [filter, setFilter] = useState('')
 
-  // state = {
-  //   contacts: [],
-  //   filter: '',
-  // };
-  useEffect
-  componentDidMount(prevProps, prevState) {
-    const todosLocalStorage = localStorage.getItem('contacts');
-    const parseTodosLocalStorage = JSON.parse(todosLocalStorage);
+  useEffect(() => {
+  localStorage.setItem(storageKey, JSON.stringify(contacts));
+  }, [contacts])
 
-    this.setState({ contacts: parseTodosLocalStorage || initialContacts });
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const nextContacts = this.state.contacts;
-    const prevContacts = prevState.contacts;
-
-    if (nextContacts !== prevContacts) {
-      localStorage.setItem('contacts', JSON.stringify(nextContacts));
-    }
-  }
-  handleSubmit = formState => {
-    const { name, number } = formState;
-    const { contacts } = this.state;
-
+ 
+  const handleSubmit = ({ name, number }) => {
     if (contacts.some(contact => contact.name === name)) {
       alert(`${name} is already in contacrs`);
       return;
     }
-
-    this.setState(prevState => ({
-      contacts: [...prevState.contacts, { name, number, id: nanoid() }],
-    }));
+    setContacts(prev => [...prev, { name, number, id: nanoid() }]);
   };
 
-  handleChangeFindInput = value => {
-    this.setState({ filter: value });
+  const handleChangeFindInput = value => {
+    setFilter(value)
   };
 
-  handleDeleteContact = id => {
-    this.setState(prevState => ({
-      contacts: prevState.contacts.filter(contact => contact.id !== id),
-    }));
+  const handleDeleteContact = id => {
+    const deletedById = contacts.filter(contact => contact.id !== id);
+    setContacts(deletedById);
   };
-  makeContactList = () => {
-    const { contacts, filter } = this.state;
+
+  const makeContactList = () => {
+  
     const filterNormalize = filter.toLowerCase();
 
     if (filter === '') {
@@ -67,15 +52,9 @@ const App = () => {
     return findNewArray;
   };
 
-  render() {
-    const { filter } = this.state;
-    const {
-      handleSubmit,
-      handleChangeFindInput,
-      handleDeleteContact,
-      makeContactList,
-    } = this;
-    const contacts = makeContactList();
+  
+
+  
 
     return (
       <div className={style.section}>
@@ -86,12 +65,12 @@ const App = () => {
         <p>Find contacts by name</p>
         <Filter onFindInput={handleChangeFindInput} inputValueSeach={filter} />
         <ContactList
-          contactList={contacts}
+          contactList={makeContactList()}
           onDeleteContact={handleDeleteContact}
         />
       </div>
     );
-  }
+  
 }
 
 export default App;
