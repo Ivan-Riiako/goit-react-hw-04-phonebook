@@ -29,24 +29,7 @@ const validationSchema = Yup.object().shape({
 
 
 const ContactForm =({onSubmit})=> {
-  // state = {
-  //   name: '',
-  //   number: '',
-  // };
-
-  // handleChange = e => {
-  //   const { name, value } = e.currentTarget;
-  //   this.setState({ [name]: value });
-  // };
-
-  // handleSubmit = e => {
-  //   e.preventDefault();
-  //   this.props.onSubmit(this.state);
-  //   this.setState({ name: '', number: '' });
-  //   // e.currentTarget.reset();
-  // };
-
-  // render() {
+  
   const initialValues = {
     name: '',
     number: '',
@@ -75,7 +58,6 @@ const ContactForm =({onSubmit})=> {
         }
       </Formik>
     );
-  // }
 }
 
 ContactForm.propTypes = {
