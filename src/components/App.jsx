@@ -48,15 +48,10 @@ const App = () => {
     return findNewArray;
   };
 
-  
-
-  
-
     return (
       <div className={style.section}>
         <h1>Phonebook</h1>
         <ContactForm onSubmit={handleSubmit} />
-
         <h2>Contacts</h2>
         <p>Find contacts by name</p>
         <Filter onFindInput={setFilter} inputValueSeach={filter} />
