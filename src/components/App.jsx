@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { useEffect, useState } from 'react';
 import { nanoid } from 'nanoid';
 
 import style from './App.module.css';
@@ -7,11 +7,15 @@ import Filter from 'components/Filter';
 import ContactList from 'components/ContactList';
 import initialContacts from './contacts.json';
 
-class App extends Component {
-  state = {
-    contacts: [],
-    filter: '',
-  };
+const App = () => {
+  const [contacts, setContacts] = useState([])
+  const [filter, setFilter] = useState('')
+
+  // state = {
+  //   contacts: [],
+  //   filter: '',
+  // };
+  useEffect
   componentDidMount(prevProps, prevState) {
     const todosLocalStorage = localStorage.getItem('contacts');
     const parseTodosLocalStorage = JSON.parse(todosLocalStorage);
