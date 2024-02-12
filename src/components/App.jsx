@@ -30,10 +30,6 @@ const App = () => {
     setContacts(prev => [...prev, { name, number, id: nanoid() }]);
   };
 
-  const handleChangeFindInput = value => {
-    setFilter(value)
-  };
-
   const handleDeleteContact = id => {
     const deletedById = contacts.filter(contact => contact.id !== id);
     setContacts(deletedById);
@@ -43,7 +39,7 @@ const App = () => {
   
     const filterNormalize = filter.toLowerCase();
 
-    if (filter === '') {
+    if (filter.trim() === '') {
       return contacts;
     }
     const findNewArray = contacts.filter(contact =>
@@ -63,7 +59,7 @@ const App = () => {
 
         <h2>Contacts</h2>
         <p>Find contacts by name</p>
-        <Filter onFindInput={handleChangeFindInput} inputValueSeach={filter} />
+        <Filter onFindInput={setFilter} inputValueSeach={filter} />
         <ContactList
           contactList={makeContactList()}
           onDeleteContact={handleDeleteContact}
