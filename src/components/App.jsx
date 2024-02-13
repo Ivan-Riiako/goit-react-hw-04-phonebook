@@ -21,7 +21,6 @@ const App = () => {
   localStorage.setItem(storageKey, JSON.stringify(contacts));
   }, [contacts])
 
- 
   const handleSubmit = ({ name, number }) => {
     if (contacts.some(contact => contact.name === name)) {
       alert(`${name} is already in contacrs`);
