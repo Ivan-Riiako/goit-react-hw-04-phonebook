@@ -45,7 +45,9 @@ const App = () => {
       alert(`${name} is already in contacrs`);
       return;
     }
-    setContacts(prev => [...prev, { name, number, id: nanoid() }]);
+
+   const newContact = { name, number, id: nanoid() };
+   setContacts(prevContacts => [...prevContacts, newContact]);
   };
 
   const handleDeleteContact = id => {
