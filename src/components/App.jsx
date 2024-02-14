@@ -8,18 +8,37 @@ import ContactList from 'components/ContactList';
 import initialContacts from './contacts.json';
 
 const storageKey = 'storagContacts';
-const getInitalContacts=() => {
-  const todosLocalStorage = localStorage.getItem(storageKey);
-  return todosLocalStorage!==null?JSON.parse(todosLocalStorage):initialContacts
-  }
+
+
+// second option
+// const getLocalStorage = () => {
+//   return JSON.parse(localStorage.getItem(storageKey)) ?? initialContacts;
+//   }
+// third option
+const useLocalStorage = (storageKey, defoltInital) => {
+  const [value, setValue] = useState(
+    () => JSON.parse(localStorage.getItem(storageKey)) ?? defoltInital
+  );
+  
+useEffect(() => {
+  localStorage.setItem(storageKey, JSON.stringify(value));
+}, [value, storageKey]);
+  return [value, setValue];
+};
 
 const App = () => {
-  const [contacts, setContacts] = useState(getInitalContacts)
-  const [filter, setFilter] = useState('')
-
-  useEffect(() => {
-  localStorage.setItem(storageKey, JSON.stringify(contacts));
-  }, [contacts])
+  // third option
+  const [contacts, setContacts] = useLocalStorage(storageKey, initialContacts);
+  const [filter, setFilter] = useState('');
+  // first option
+  // const [contacts, setContacts] = useState(
+  //   () => JSON.parse(localStorage.getItem(storageKey)) ?? initialContacts
+  // );
+  // second option
+  // const [contacts, setContacts] = useState(getLocalStorage);
+  // useEffect(() => {
+  // localStorage.setItem(storageKey, JSON.stringify(contacts));
+  // }, [contacts])
 
   const handleSubmit = ({ name, number }) => {
     if (contacts.some(contact => contact.name === name)) {
@@ -35,32 +54,31 @@ const App = () => {
   };
 
   const makeContactList = () => {
-  
-    const filterNormalize = filter.toLowerCase();
-
     if (filter.trim() === '') {
       return contacts;
     }
+
+    const filterNormalize = filter.toLowerCase();
     const findNewArray = contacts.filter(contact =>
       contact.name.toLowerCase().includes(filterNormalize)
     );
+
     return findNewArray;
   };
-
-    return (
-      <div className={style.section}>
-        <h1>Phonebook</h1>
-        <ContactForm onSubmit={handleSubmit} />
-        <h2>Contacts</h2>
-        <p>Find contacts by name</p>
-        <Filter onFindInput={setFilter} inputValueSeach={filter} />
-        <ContactList
-          contactList={makeContactList()}
-          onDeleteContact={handleDeleteContact}
-        />
-      </div>
-    );
-  
+  console.log(makeContactList());
+  return (
+    <div className={style.section}>
+      <h1>Phonebook</h1>
+      <ContactForm onSubmit={handleSubmit} />
+      <h2>Contacts</h2>
+      <p>Find contacts by name</p>
+      <Filter onFindInput={setFilter} inputValueSeach={filter} />
+      <ContactList
+        contactList={makeContactList()}
+        onDeleteContact={handleDeleteContact}
+      />
+    </div>
+  );
 }
 
 export default App;
