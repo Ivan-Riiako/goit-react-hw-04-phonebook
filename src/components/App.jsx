@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import {  useState } from 'react';
 import { nanoid } from 'nanoid';
 
 import style from './App.module.css';
@@ -7,6 +7,8 @@ import Filter from 'components/Filter';
 import ContactList from 'components/ContactList';
 import initialContacts from './contacts.json';
 
+import useLocalStorage from 'hooks';
+
 const storageKey = 'storagContacts';
 
 
@@ -14,17 +16,7 @@ const storageKey = 'storagContacts';
 // const getLocalStorage = () => {
 //   return JSON.parse(localStorage.getItem(storageKey)) ?? initialContacts;
 //   }
-// third option
-const useLocalStorage = (storageKey, defoltInital) => {
-  const [value, setValue] = useState(
-    () => JSON.parse(localStorage.getItem(storageKey)) ?? defoltInital
-  );
-  
-useEffect(() => {
-  localStorage.setItem(storageKey, JSON.stringify(value));
-}, [value, storageKey]);
-  return [value, setValue];
-};
+
 
 const App = () => {
   // third option
